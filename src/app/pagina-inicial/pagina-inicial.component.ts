@@ -9,6 +9,8 @@ export class PaginaInicialComponent implements OnInit {
 
   constructor() { }
 
+  cep!:string;
+
   ngOnInit(): void {
   }
 

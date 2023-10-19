@@ -1,1 +1,7 @@
-<p>pagina-inicial works!</p>
+
+<section class="bg">
+    <div>
+        <input type="text" id="inputCep" [(ngModel)]="cep">
+        <button [routerLink]="['/resultadoCep', cep]">Enviar Cep!</button>
+    </div>
+</section>

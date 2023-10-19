@@ -6,7 +6,8 @@ import { ResultadoCepComponent } from './resultado-cep/resultado-cep.component';
 const routes: Routes = [
   {path:"inicial",component:PaginaInicialComponent},
   {path:"resultadoCep",component:ResultadoCepComponent},
-  {path:"",redirectTo:"resultadoCep",pathMatch:"full"}
+  {path:"resultadoCep/:cep",component:ResultadoCepComponent},
+  {path:"",redirectTo:"inicial",pathMatch:"full"}
 ];
 
 @NgModule({

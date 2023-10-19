@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CepService } from '../services/cep.service';
 
 @Component({
@@ -8,10 +8,29 @@ import { CepService } from '../services/cep.service';
 })
 export class ResultadoCepComponent implements OnInit {
 
-  constructor(public cepService : CepService) { }
+  dado: any;
 
-  ngOnInit(): void {
-    this.cepService.getCep('01001000').subscribe((resposta: any) => {console.log(resposta);} );
+  // @Input()
+  // cepPassado!: string;
+
+  constructor(public cepService: CepService) { }
+
+  async ngOnInit(): Promise<void> {
+    let url = window.location.href.substring(window.location.href.lastIndexOf('/'));
+    url.length > 1 ? url = url.substring(1) : url = url;
+
+
+
+    await this.retornaCep(url);
+
+  }
+
+  async retornaCep(cep: string) {
+    this.cepService.getCep(cep).subscribe((resposta: any) => {
+      this.dado = resposta;
+    });
+
+    return JSON.stringify(this.dado);
   }
 
 }
