@@ -1,36 +1,44 @@
-<div>
-    <div class="informations"><p>CEP:</p> 
-        {{cepData.cep}}
+<div class="bg">
+    <div class="left-side">
+        <div class="informations">
+            <p>CEP:</p>
+            {{cepData.cep}}
+        </div>
+    
+        <div class="informations">
+            <p class="title-information">LOGRADOURO:</p>
+            <p>{{cepData.logradouro}}</p>
+        </div>
+    
+        <div class="informations">
+            <p class="title-information">COMPLEMENTO:</p>
+            <p>{{cepData.complemento}}</p>
+        </div>
+    
+        <div class="informations">
+            <p class="title-information">BAIRRO:</p>
+            <p>{{cepData.bairro}}</p>
+        </div>
+    
+        <div class="informations">
+            <p class="title-information">LOCALIDADE:</p>
+            <p>{{cepData.localidade}}</p>
+        </div>
+    
+        <div class="informations">
+            <p class="title-information">UF:</p>
+            <p>{{cepData.uf}}</p>
+        </div>
+    
+        <div class="informations">
+            <p class="title-information">DDD:</p>
+            <p>{{cepData.ddd}}</p>
+        </div>
     </div>
-
-    <div class="informations">
-        <p class="title-information">LOGRADOURO:</p> 
-        <p>{{cepData.logradouro}}</p>
-    </div>
-
-    <div class="informations"><p class="title-information">COMPLEMENTO:</p> 
-        <p>{{cepData.complemento}}</p>
-    </div>
-
-    <div class="informations"><p class="title-information">BAIRRO:</p> 
-        <p>{{cepData.bairro}}</p>
-    </div>
-
-    <div class="informations"><p class="title-information">LOCALIDADE:</p> 
-        <p>{{cepData.localidade}}</p>
-    </div>
-
-    <div class="informations"><p class="title-information">UF:</p>
-        <p>{{cepData.uf}}</p>
-    </div>
-
-    <div class="informations"><p class="title-information">DDD:</p> 
-        <p>{{cepData.ddd}}</p>
+    
+    <div class="right-side">
+        <iframe width="600" height="450" frameborder="0" style="border:0" [src]="urlMapa" allowfullscreen></iframe>
     </div>
 </div>
 
-<button (click)="searchCoordinatesByCep()">awdawdawd</button>
-
-<iframe src="urlMapa" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-
-
+<button (click)="searchCoordinatesByCep('89270000')">awdawdawd</button>

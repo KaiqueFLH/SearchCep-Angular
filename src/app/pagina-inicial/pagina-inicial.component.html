@@ -1,7 +1,11 @@
 
 <section class="bg">
-    <div>
+    <div class="divInput">
+        <h1>
+            <span class="span">Busca</span>
+            <span class="span">Cep</span>
+        </h1>
         <input type="text" id="inputCep" [(ngModel)]="cep">
-        <button [routerLink]="['/resultadoCep', cep]">Enviar Cep!</button>
+        <button [routerLink]="['/resultadoCep', cep]" id="btnCep">Enviar Cep!</button>
     </div>
 </section>

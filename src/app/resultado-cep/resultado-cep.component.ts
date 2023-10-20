@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CepService } from '../services/cep.service';
 import { MapaService } from '../services/mapa.service';
-
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 interface cepInterface {
   cep: string;
   logradouro: string;
@@ -13,6 +13,12 @@ interface cepInterface {
   [key: string]: string;
 
 }
+
+interface coordinatesInterface {
+  lat: string;
+  lon: string;
+  // [key: string]: string;
+}
 @Component({
   selector: 'app-resultado-cep',
   templateUrl: './resultado-cep.component.html',
@@ -23,15 +29,18 @@ export class ResultadoCepComponent implements OnInit {
 
   dado: any;
 
-  cep: string="";
-  logradouro: string="";
-  complemento: string="";
-  bairro: string="";
-  localidade: string="";
-  uf: string="";
-  ddd: string="";
+  cep: string = "";
+  logradouro: string = "";
+  complemento: string = "";
+  bairro: string = "";
+  localidade: string = "";
+  uf: string = "";
+  ddd: string = "";
 
-  cepData:cepInterface = {
+  lat: string = "";
+  lon: string = "";
+
+  cepData: cepInterface = {
     cep: '',
     logradouro: '',
     complemento: '',
@@ -41,60 +50,65 @@ export class ResultadoCepComponent implements OnInit {
     ddd: ''
   }
 
-  urlMapa!:string;
-  coordinates!: { lat: any; lon: any; };
-  
+  urlMapa!: SafeResourceUrl;
+
+  coordinates: coordinatesInterface = {
+    lat:"" ,
+    lon: ""
+  };
+
 
   // @Input()
   // cepPassado!: string;
 
-  constructor(public cepService: CepService,public mapaService:MapaService) { }
+  constructor(public cepService: CepService, public mapaService: MapaService, private sanitizer:DomSanitizer) { }
 
   async ngOnInit(): Promise<void> {
     let url = window.location.href.substring(window.location.href.lastIndexOf('/'));
     url.length > 1 ? url = url.substring(1) : url = url;
 
     await this.retornaCep(url);
-    await this.searchCoordinatesByCep()
+    await this.searchCoordinatesByCep(url)
 
   }
 
-  async searchCoordinatesByCep() {
-    this.mapaService.getCoordinatesByCep(this.cep).subscribe((data: any) => {
-      if (data.results && data.results.length > 0) {
-        const firstResult = data.results[2];
-        this.coordinates = {
-          lat: firstResult.location.lat,
-          lon: firstResult.location.lng
-        };
-        console.log(this.coordinates);
-        
-      } 
+  async searchCoordinatesByCep(cep: string) {
+    this.mapaService.getCoordinatesByCep(cep).subscribe((resposta: any) => {
+      this.coordinates.lat = resposta[0].lat;
+      this.coordinates.lon = resposta[0].lon;
+
+      // Construa a URL correta do Google Maps com base nas coordenadas
+      const googleMapsUrl = `https://www.google.com/maps/embed?1m18!1m12!1m3!1d0!2d${this.coordinates.lon}!3d${this.coordinates.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1`;
+
+      // Sanitize a URL para evitar erros de URL insegura
+      this.urlMapa = this.sanitizer.bypassSecurityTrustResourceUrl(googleMapsUrl);
     });
   }
 
-  async retornaCep(cepP: string) {
-    
+  async retornaCep(cep: string) {
 
-    this.cepService.getCep(cepP).subscribe((resposta: any) => {
+
+    this.cepService.getCep(cep).subscribe((resposta: any) => {
       this.cepData = resposta;
 
-      this.urlMapa = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7140.085510730014!2d-49.12212908123324!3d-26.518749357150956!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94de94a7e5f2e1cd%3A0x8e943b9531499bc1!2sR.%20Padre%20Alu%C3%ADsio%20Boeing%20-%20Barra%20do%20Rio%20Cerro%2C%20Jaragu%C3%A1%20do%20Sul%20-%20SC%2C%2089270000!5e0!3m2!1spt-BR!2sbr!4v1697760951342!5m2!1spt-BR!2sbr"
+
+
+
 
       for (const key in this.cepData) {
         if (Object.prototype.hasOwnProperty.call(this.cepData, key)) {
-          if (this.cepData[key] == "" || undefined) {
+          if (this.cepData[key] == "" || this.cepData[key] == undefined) {
             this.cepData[key] = "Não encontrado.";
           }
-          
+
         }
       }
 
       this.dado = JSON.stringify(this.dado);
     });
-    
-     
-     
+
+
+
     return this.dado;
   }
 
