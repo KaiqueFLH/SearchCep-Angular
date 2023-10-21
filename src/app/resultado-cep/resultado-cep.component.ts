@@ -2,24 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { CepService } from '../services/cep.service';
 import { MapaService } from '../services/mapa.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-interface cepInterface {
-  cep: string;
-  logradouro: string;
-  complemento: string;
-  bairro: string;
-  localidade: string;
-  uf: string;
-  ddd: string;
-  [key: string]: string;
 
-}
-
-interface coordinatesInterface {
-  lat: string;
-  lon: string;
-  boundingbox: string[];
-  // [key: string]: string;
-}
 @Component({
   selector: 'app-resultado-cep',
   templateUrl: './resultado-cep.component.html',
@@ -30,38 +13,44 @@ export class ResultadoCepComponent implements OnInit {
 
   dado: any;
 
-  cep: string = "";
-  logradouro: string = "";
-  complemento: string = "";
-  bairro: string = "";
-  localidade: string = "";
-  uf: string = "";
-  ddd: string = "";
-
   lat: string = "";
   lon: string = "";
 
-  cepData: cepInterface = {
-    cep: '',
-    logradouro: '',
-    complemento: '',
-    bairro: '',
-    localidade: '',
-    uf: '',
-    ddd: ''
+  cepData: any = {
+    place_id: "",
+    licence: "",
+    lat: "",
+    lon: "",
+    classType: "",
+    type: "",
+    place_rank: "",
+    importance: "",
+    addressType: "",
+    name: "",
+    display_name: "",
+    address: {
+      suburb: "",
+      town: "",
+      municipality: "",
+      postcode: "",
+      region: "",
+      state: "",
+      ISO3166_2_lvl4: "",
+      country: "",
+      country_code: ""
+    },
+    boundingbox: []
+
   }
 
   urlMapa!: SafeResourceUrl;
 
-  coordinates: coordinatesInterface = {
+  coordinates: any = {
     lat: "",
     lon: "",
     boundingbox: []
   };
 
-
-  // @Input()
-  // cepPassado!: string;
 
   constructor(public cepService: CepService, public mapaService: MapaService, private sanitizer: DomSanitizer) { }
 
@@ -74,27 +63,45 @@ export class ResultadoCepComponent implements OnInit {
 
   }
 
+  isCep(cep: string) {
+    if (cep.length == 8 && cep.includes("-") == true) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  isLocalidade(localidade: string) {
+    if (localidade.length > 8 && localidade.includes("-") == false) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
   async searchCoordinatesByCep(cep: string) {
-    this.mapaService.getCoordinatesByCep(cep).subscribe((resposta: any) => {
+    this.mapaService.getCoordinates(cep).subscribe((resposta: any) => {
       this.coordinates.lat = resposta[0].lat;
       this.coordinates.lon = resposta[0].lon;
       this.coordinates.boundingbox = resposta[0].boundingbox.toString();
-      // Construa a URL correta do Google Maps com base nas coordenadas
+
       const googleMapsUrl = `https://nominatim.openstreetmap.org/search?postalcode=${cep}`;
-      // `https://www.openstreetmap.org/export/embed.html?bbox=${this.coordinates.boundingbox}&amp;layer=mapnik`;
-      // Sanitize a URL para evitar erros de URL insegura
+
       this.urlMapa = this.sanitizer.bypassSecurityTrustResourceUrl(googleMapsUrl);
     });
   }
 
   async retornaCep(cep: string) {
-    this.cepService.getCep(cep).subscribe((resposta: any) => {
+    this.mapaService.getCoordinates(cep).subscribe((resposta: any) => {
+      console.log(resposta);
+      
       if (cep != undefined && cep != "") {
-        if (cep != resposta.cep) {
+        if (cep != resposta[0].name) {
           alert("CEP não encontrado, revise a formatação e tente novamente.");
           window.location.href = "http://localhost:4200/";
         } else {
-          this.cepData = resposta;
+          this.cepData = resposta[0];
 
           for (const key in this.cepData) {
             if (Object.prototype.hasOwnProperty.call(this.cepData, key)) {
@@ -110,12 +117,8 @@ export class ResultadoCepComponent implements OnInit {
       }
 
     });
-    return this.cepData.cep;
+    return this.cepData;
   }
 
-  
   //fazer aceitar outros parametros
-
-
-
 }

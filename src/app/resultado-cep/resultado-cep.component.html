@@ -1,38 +1,43 @@
 <div class="bg">
     <div class="left-side">
         <div class="informations">
-            <p>CEP:</p>
-            {{cepData.cep}}
+            <p class="title-information">CEP:</p>
+            <p class="text-information">{{cepData.name}}</p>
+        </div>
+
+        <div class="informations">
+            <p class="title-information">INFORMAÇÕES GERAIS:</p>
+            <p class="text-information">{{cepData.display_name}}</p>
         </div>
     
         <div class="informations">
-            <p class="title-information">LOGRADOURO:</p>
-            <p>{{cepData.logradouro}}</p>
+            <p class="title-information">LATITUDE:</p>
+            <p class="text-information" >{{cepData.lat}}</p>
+        </div>
+
+        <div class="informations">
+            <p class="title-information">LONGITUDE:</p>
+            <p class="text-information">{{cepData.lon}}</p>
         </div>
     
         <div class="informations">
-            <p class="title-information">COMPLEMENTO:</p>
-            <p>{{cepData.complemento}}</p>
+            <p class="title-information">CIDADE:</p>
+            <p class="text-information">{{cepData.address.city}}</p>
         </div>
     
         <div class="informations">
-            <p class="title-information">BAIRRO:</p>
-            <p>{{cepData.bairro}}</p>
+            <p class="title-information">REGIÃO:</p>
+            <p class="text-information">{{cepData.address.region}}</p>
         </div>
     
         <div class="informations">
-            <p class="title-information">LOCALIDADE:</p>
-            <p>{{cepData.localidade}}</p>
+            <p class="title-information">ESTADO:</p>
+            <p class="text-information">{{cepData.address.state}}</p>
         </div>
     
         <div class="informations">
-            <p class="title-information">UF:</p>
-            <p>{{cepData.uf}}</p>
-        </div>
-    
-        <div class="informations">
-            <p class="title-information">DDD:</p>
-            <p>{{cepData.ddd}}</p>
+            <p class="title-information">PAÍS:</p>
+            <p class="text-information">{{cepData.address.country}}</p>
         </div>
     </div>
     

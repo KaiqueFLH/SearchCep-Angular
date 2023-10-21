@@ -13,10 +13,10 @@ export class MapaService{
   }
 
   
-  getCoordinatesByCep(cep: string) {
-    const apiUrl = "https://nominatim.openstreetmap.org/search?postalcode="+cep+"&format=json&bounded=1&polygon=1&addressdetails=1";
+  getCoordinates(param: string): Observable<any> {
     
-    return this.httpClient.get(apiUrl);
+    
+    return this.httpClient.get(`https://nominatim.openstreetmap.org/search?postalcode=${param}&format=json&bounded=1&polygon=1&addressdetails=1`);
   }
 
     // let value = this.httpClient.get(this.apiURL).subscribe((resposta: any) => {return value;});
