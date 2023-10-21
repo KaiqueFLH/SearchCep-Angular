@@ -14,7 +14,7 @@ export class MapaService{
 
   
   getCoordinatesByCep(cep: string) {
-    const apiUrl = "https://nominatim.openstreetmap.org/search?postalcode="+cep+"&format=json&polygon=1&addressdetails=1";
+    const apiUrl = "https://nominatim.openstreetmap.org/search?postalcode="+cep+"&format=json&bounded=1&polygon=1&addressdetails=1";
     
     return this.httpClient.get(apiUrl);
   }
